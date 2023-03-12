@@ -1,16 +1,15 @@
 package com.example.geektrust.exception;
 
-public class ValidationExecption extends Exception {
+public class ValidationException extends Exception {
 
-	public ValidationExecption() {
+	public ValidationException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ValidationExecption(String message) {
+	public ValidationException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	
 }
