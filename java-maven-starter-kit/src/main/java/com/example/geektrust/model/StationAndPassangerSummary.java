@@ -1,5 +1,6 @@
 package com.example.geektrust.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class StationAndPassangerSummary {
 		this.amountOfTravelChargesAirport=0;
 		this.amountOfTravelChargesCentral=0;
 		this.amoutOfDiscountAirport=0;
+		this.passangerCheckInList = new ArrayList<>();
 	}
 
 	public Map<String, Passanger> getCardIdPassangerMap() {

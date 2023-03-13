@@ -1,7 +1,11 @@
 package com.example.geektrust.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import com.example.geektrust.exception.PassangerNotFoundException;
 import com.example.geektrust.exception.ValidationException;
@@ -55,11 +59,34 @@ public class TravelServiceImpl implements TravelService {
 		
 		overallSummary+="TOTAL_COLLECTION CENTRAL "+summary.getAmountOfTravelChargesCentral()+" "+summary.getAmountOfDiscountCentral()+"\n";
 		overallSummary+="PASSENGER_TYPE_SUMMARY\n";
-		overallSummary+= passangerTypeSummary("CENTRAL");		
+		overallSummary+= passangerTypeSummary("CENTRAL");
+		overallSummary+="TOTAL_COLLECTION AIRPORT "+summary.getAmountOfTravelChargesAirport()+" "+summary.getAmoutOfDiscountAirport()+"\n";
+		overallSummary+="PASSENGER_TYPE_SUMMARY\n";
+		overallSummary+= passangerTypeSummary("AIRPORT");
 	}
 
-	private String passangerTypeSummary(String string) {
+	private String passangerTypeSummary(String station) {
 		
+		Map<String, Set<CheckInDetails>> passangerTypeAndSetOfUniquePassangerById = summary.getPassangerCheckInList().stream().filter(passanger->passanger.getFromStation().equals(station)).collect(Collectors.groupingBy(passanger-> passanger.getPassangerType(), Collectors.toSet()));
+		
+		Map<String, Set<CheckInDetails>> sortedMap = new TreeMap(new SortByValueThenKeyComparator());
+//		Map<String, Set<CheckInDetails>> sortedMap = passangerTypeAndSetOfUniquePassangerById.entrySet().stream().sorted(new SortByValueThenKeyComparator())
+//				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2)-> entry1, new LinkedHashMap()));
+		
+		
+		
+//		for(Map.Entry<String, Set<CheckInDetails>> toBeSorted : passangerTypeAndSetOfUniquePassangerById.entrySet()) {
+//			
+//			sortedMap.put(toBeSorted);
+//		}
+		
+		String summaryOfPassangersAtStation="";
+		
+		for(Map.Entry<String, Set<CheckInDetails>> sortedDetails : sortedMap.entrySet()) {
+			
+			summaryOfPassangersAtStation+= sortedDetails.getKey()+" "+sortedDetails.getValue().size()+"\n";
+		}
+		return summaryOfPassangersAtStation;
 		
 	}
 

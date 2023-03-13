@@ -1,5 +1,7 @@
 package com.example.geektrust.model;
 
+import java.util.Objects;
+
 public class CheckInDetails {
 
 	private String metroCardId;
@@ -65,6 +67,23 @@ public class CheckInDetails {
 
 	public void setCharge(int charge) {
 		this.charge = charge;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(metroCardId, passangerType);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CheckInDetails other = (CheckInDetails) obj;
+		return Objects.equals(metroCardId, other.metroCardId) && Objects.equals(passangerType, other.passangerType);
 	}
 	
 	

@@ -17,7 +17,9 @@ public class Main {
         	
         	if(args[0]==null) throw new IOException("Please provide input");
         	
-        	String commandLine = args[0];
+//        	for(String str : args) System.out.println(str);
+        	
+        	String[] commandLine = args;
         	processCommandLineArgument(commandLine);
             
         } catch (IOException | ValidationException  | PassangerNotFoundException e) {
@@ -27,10 +29,12 @@ public class Main {
         
     }
     
-    public static void processCommandLineArgument(String commandLine) throws ValidationException, PassangerNotFoundException {
+    public static void processCommandLineArgument(String[] commandLine) throws ValidationException, PassangerNotFoundException {
     	
     	CommandProcessingUtility commandsToBeProcessed = new CommandProcessingUtility(commandLine); 
     	List<CommandAndInputs> command = commandsToBeProcessed.getCommandAndInputsFromFile();
+    	
+//    	System.out.println(command);
     	TravelService service = new TravelServiceImpl();
     	service.executeCommand(command);
     	

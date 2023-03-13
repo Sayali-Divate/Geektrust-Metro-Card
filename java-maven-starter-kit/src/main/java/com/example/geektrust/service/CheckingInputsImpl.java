@@ -11,6 +11,7 @@ public class CheckingInputsImpl implements CheckingInputs {
 	public void checkInputBeforeExecution(CommandAndInputs commandWithTokens) throws ValidationException {
 		
 		String command = commandWithTokens.getCommand();
+
 		List<String> inputs = commandWithTokens.getInputs();
 		
 		if(command.equals("BALANCE")) 		
@@ -19,9 +20,10 @@ public class CheckingInputsImpl implements CheckingInputs {
 		else if(command.equals("CHECK_IN"))
 			checkForCheckInCommand(inputs);
 		
-		else if(command.equals("PRINT_SUMMARY") && inputs.size()!=0)
-			throw new ValidationException("There should be no inputs after PRINT_SUMMARY command");
-		
+		else if(command.equals("PRINT_SUMMARY")) {			
+			if(inputs.size()!=0)
+				throw new ValidationException("There should be no inputs after PRINT_SUMMARY command");
+		}
 		else
 			throw new ValidationException("Invalid command");
 			

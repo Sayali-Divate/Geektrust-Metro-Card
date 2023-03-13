@@ -9,16 +9,16 @@ import com.example.geektrust.model.CommandAndInputs;
 
 public class CommandProcessingUtility {
 
-	private String file;
+	private String[] file;
 
-	public CommandProcessingUtility(String file) {
+	public CommandProcessingUtility(String[] file) {
 		super();
 		this.file = file;
 	}
 	
 	public List<CommandAndInputs> getCommandAndInputsFromFile(){
 		
-		return Stream.of(file.split("\n"))
+		return Stream.of(file)
 				.filter(line-> !line.isBlank())
 				.map(line -> parseToCommandAndInput(line))
 				.collect(Collectors.toList());		
