@@ -1,7 +1,10 @@
 package com.example.geektrust;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+
 
 import com.example.geektrust.exception.PassangerNotFoundException;
 import com.example.geektrust.exception.ValidationException;
@@ -11,32 +14,34 @@ import com.example.geektrust.service.TravelServiceImpl;
 import com.example.geektrust.utility.CommandProcessingUtility;
 
 public class Main {
-    public static void main(String[] args) throws PassangerNotFoundException, ValidationException {        
+    public static void main(String[] args) throws PassangerNotFoundException, ValidationException, FileNotFoundException {        
 
-        try {       	
+        try {             	
+         	
+        	if(args.length==0) throw new IOException("Please provide input");  	
         	
-        	if(args[0]==null) throw new IOException("Please provide input");
+        	String commandLine = args[0];
+        	processCommandLineArgument(commandLine);   	
         	
-//        	for(String str : args) System.out.println(str);
         	
-        	String[] commandLine = args;
-        	processCommandLineArgument(commandLine);
             
         } catch (IOException | ValidationException  | PassangerNotFoundException e) {
         	
         	System.out.println(e.getMessage());
-        }
+        }      
+       
         
     }
     
-    public static void processCommandLineArgument(String[] commandLine) throws ValidationException, PassangerNotFoundException {
+    public static String processCommandLineArgument(String commandLine) throws ValidationException, PassangerNotFoundException {
     	
     	CommandProcessingUtility commandsToBeProcessed = new CommandProcessingUtility(commandLine); 
-    	List<CommandAndInputs> command = commandsToBeProcessed.getCommandAndInputsFromFile();
+    	List<CommandAndInputs> commandList = commandsToBeProcessed.getCommandAndInputsFromFile();    
     	
 //    	System.out.println(command);
+
     	TravelService service = new TravelServiceImpl();
-    	service.executeCommand(command);
+    	return service.executeCommand(commandList);
     	
     }
 }

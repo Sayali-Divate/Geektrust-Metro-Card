@@ -3,8 +3,12 @@ package com.example.geektrust.model;
 public class JourneyCharge {
 
 	private int discount;
-	private int amountPaid;
+	private int amountPaid;	
 	
+	public JourneyCharge() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public JourneyCharge(int discount, int amountPaid) {
 		super();
 		this.discount = discount;

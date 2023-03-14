@@ -8,19 +8,16 @@ public class Passanger {
 	private int balance;
 	private int numberOfjourney;
 	
+	public Passanger() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public Passanger(String metroCardId, int balance) {
 		super();
 		this.metroCardId = metroCardId;
 		this.balance = balance;
-	}
-
-	public int getNumberOfjourney() {
-		return numberOfjourney;
-	}
-
-	public void setNumberOfjourney(int numberOfjourney) {
-		this.numberOfjourney = numberOfjourney;
-	}
+	}	
 
 	public String getMetroCardId() {
 		return metroCardId;
@@ -36,6 +33,14 @@ public class Passanger {
 
 	public void setBalance(int balance) {
 		this.balance = balance;
+	}
+
+	public int getNumberOfjourney() {
+		return numberOfjourney;
+	}
+
+	public void setNumberOfjourney(int numberOfjourney) {
+		this.numberOfjourney = numberOfjourney;
 	}
 
 	@Override

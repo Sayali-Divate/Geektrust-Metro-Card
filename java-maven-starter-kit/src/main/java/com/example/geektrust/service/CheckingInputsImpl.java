@@ -48,7 +48,9 @@ public class CheckingInputsImpl implements CheckingInputs {
 		if(inputs.size()!=2)
 			throw new ValidationException("Please enter valid number of inputs with BALANCE command");
 		
-		int balance = Integer.parseInt(inputs.get(1));
+//		System.out.println(inputs);
+		
+		int balance = Integer.valueOf(inputs.get(1));
 		if(balance<0)
 			throw new ValidationException("Metro card balance can not be negative");
 	}

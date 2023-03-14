@@ -1,9 +1,12 @@
 package com.example.geektrust.service;
 
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -22,11 +25,13 @@ public class TravelServiceImpl implements TravelService {
 	public TravelServiceImpl() {
 		super();
 		this.summary = new StationAndPassangerSummary();
-	}
-
+	}	
+	
 	@Override
-	public void executeCommand(List<CommandAndInputs> commandLine) throws ValidationException, PassangerNotFoundException {		
-			
+	public String executeCommand(List<CommandAndInputs> commandLine) throws ValidationException, PassangerNotFoundException {		
+		
+		String output="";
+		
 		for(CommandAndInputs inputs : commandLine) {
 			
 			CheckingInputs inputCheckService = new CheckingInputsImpl();
@@ -37,56 +42,56 @@ public class TravelServiceImpl implements TravelService {
 			
 			switch(command) {
 			
-				case "BALANCE" : 
+				case "BALANCE" : 					
 					registerMetroCardAndAddBalance(tokens);
 					break;
 					
-				case "CHECK_IN" :
+				case "CHECK_IN" :					
 					processCheckIn(tokens);
 					break;
 					
-				case "PRINT_SUMMARY" :
-					processPrintSummary();
+				case "PRINT_SUMMARY" :					
+					output = processPrintSummary();
 			}
 			
-		}	
+		}
+		return output;
 		
 	}
 
-	private void processPrintSummary() {		
+	private String processPrintSummary() {		
 		
 		String overallSummary ="";
 		
 		overallSummary+="TOTAL_COLLECTION CENTRAL "+summary.getAmountOfTravelChargesCentral()+" "+summary.getAmountOfDiscountCentral()+"\n";
 		overallSummary+="PASSENGER_TYPE_SUMMARY\n";
-		overallSummary+= passangerTypeSummary("CENTRAL");
+		overallSummary+= passangerTypeSummary("CENTRAL")+"\n";
 		overallSummary+="TOTAL_COLLECTION AIRPORT "+summary.getAmountOfTravelChargesAirport()+" "+summary.getAmoutOfDiscountAirport()+"\n";
 		overallSummary+="PASSENGER_TYPE_SUMMARY\n";
 		overallSummary+= passangerTypeSummary("AIRPORT");
+		
+		System.out.println(overallSummary);
+		return overallSummary;
 	}
 
 	private String passangerTypeSummary(String station) {
 		
 		Map<String, Set<CheckInDetails>> passangerTypeAndSetOfUniquePassangerById = summary.getPassangerCheckInList().stream().filter(passanger->passanger.getFromStation().equals(station)).collect(Collectors.groupingBy(passanger-> passanger.getPassangerType(), Collectors.toSet()));
 		
-		Map<String, Set<CheckInDetails>> sortedMap = new TreeMap(new SortByValueThenKeyComparator());
-//		Map<String, Set<CheckInDetails>> sortedMap = passangerTypeAndSetOfUniquePassangerById.entrySet().stream().sorted(new SortByValueThenKeyComparator())
-//				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2)-> entry1, new LinkedHashMap()));
+
+		Map<String, Integer> sortedMap = passangerTypeAndSetOfUniquePassangerById.entrySet().stream()
+                .sorted(new SortByValueThenKeyComparator())
+                .collect(Collectors.toMap(Map.Entry::getKey,
+				        entry-> entry.getValue().size(),
+				        (oldValue, newValue) -> oldValue, 
+				        LinkedHashMap::new));
+      
+		String summaryOfPassangersAtStation= sortedMap.entrySet().stream()
+																	.map(entry->entry.getKey()+" "+entry.getValue())
+																	.collect(Collectors.joining("\n"));		
 		
+		return summaryOfPassangersAtStation;		
 		
-		
-//		for(Map.Entry<String, Set<CheckInDetails>> toBeSorted : passangerTypeAndSetOfUniquePassangerById.entrySet()) {
-//			
-//			sortedMap.put(toBeSorted);
-//		}
-		
-		String summaryOfPassangersAtStation="";
-		
-		for(Map.Entry<String, Set<CheckInDetails>> sortedDetails : sortedMap.entrySet()) {
-			
-			summaryOfPassangersAtStation+= sortedDetails.getKey()+" "+sortedDetails.getValue().size()+"\n";
-		}
-		return summaryOfPassangersAtStation;
 		
 	}
 
@@ -139,7 +144,7 @@ public class TravelServiceImpl implements TravelService {
 		if(currPassanger.getBalance()<charge) {
 			
 			int requiredCharge = charge - currPassanger.getBalance();
-			payableAmount = (int)(requiredCharge*0.02);	
+			payableAmount = (int)(requiredCharge*0.02) + charge;	
 			currPassanger.setBalance(0);
 		}
 		else {

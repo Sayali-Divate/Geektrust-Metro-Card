@@ -6,8 +6,12 @@ import java.util.Objects;
 public class CommandAndInputs {
 
 	private String command;
-	private List<String> inputs;
+	private List<String> inputs;	
 	
+	public CommandAndInputs() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public CommandAndInputs(String command, List<String> inputsWithoutCommand) {
 		
 		this.command = command;
