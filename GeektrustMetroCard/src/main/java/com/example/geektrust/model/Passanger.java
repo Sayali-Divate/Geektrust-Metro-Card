@@ -57,7 +57,7 @@ public class Passanger {
 		if (getClass() != obj.getClass())
 			return false;
 		Passanger other = (Passanger) obj;
-		return Objects.equals(metroCardId, other.metroCardId);
+		return Objects.equals(metroCardId, other.metroCardId) && Objects.equals(balance, other.balance);
 	}
 	
 	

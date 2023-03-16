@@ -13,7 +13,12 @@ import com.example.geektrust.model.CommandAndInputs;
 
 public class CommandProcessingUtility {
 
-	private String file;
+	private String file;	
+
+	public CommandProcessingUtility() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public CommandProcessingUtility(String file) {
 		super();

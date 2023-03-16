@@ -59,7 +59,7 @@ public class TravelServiceImpl implements TravelService {
 		
 	}
 
-	private String processPrintSummary() {		
+	public String processPrintSummary() {		
 		
 		String overallSummary ="";
 		
@@ -74,7 +74,7 @@ public class TravelServiceImpl implements TravelService {
 		return overallSummary;
 	}
 
-	private String passangerTypeSummary(String station) {
+	public String passangerTypeSummary(String station) {
 		
 		Map<String, Set<CheckInDetails>> passangerTypeAndSetOfUniquePassangerById = summary.getPassangerCheckInList().stream().filter(passanger->passanger.getFromStation().equals(station)).collect(Collectors.groupingBy(passanger-> passanger.getPassangerType(), Collectors.toSet()));
 		
@@ -95,7 +95,7 @@ public class TravelServiceImpl implements TravelService {
 		
 	}
 
-	private void processCheckIn(List<String> tokens) throws PassangerNotFoundException {
+	public void processCheckIn(List<String> tokens) throws PassangerNotFoundException {
 		
 		String id = tokens.get(0);
 		String type = tokens.get(1);
@@ -110,7 +110,7 @@ public class TravelServiceImpl implements TravelService {
 		
 	}
 
-	private void updateStationSummary(CheckInDetails checkIn) {
+	public void updateStationSummary(CheckInDetails checkIn) {
 		
 		switch(checkIn.getFromStation()) {
 		
@@ -126,7 +126,7 @@ public class TravelServiceImpl implements TravelService {
 		
 	}
 
-	private JourneyCharge chargesAndDiscountCalculation(String id, int charge) throws PassangerNotFoundException {
+	public JourneyCharge chargesAndDiscountCalculation(String id, int charge) throws PassangerNotFoundException {
 		
 		Passanger currPassanger = summary.getCardIdPassangerMap().get(id);
 		
@@ -160,13 +160,14 @@ public class TravelServiceImpl implements TravelService {
 		
 	}
 
-	private CheckInDetails enterCheckedInDetails(String id, String type, String station) {	
+	public CheckInDetails enterCheckedInDetails(String id, String type, String station) {	
 		
 		CheckInDetails checkedIn = new CheckInDetails(id, type, station);
+		checkedIn.setCharge(type);
 		return checkedIn;
 	}
 
-	private void registerMetroCardAndAddBalance(List<String> tokens) {
+	public Passanger registerMetroCardAndAddBalance(List<String> tokens) {
 		
 		String cardId = tokens.get(0);
 		int balance = Integer.parseInt(tokens.get(1));
@@ -179,11 +180,15 @@ public class TravelServiceImpl implements TravelService {
 			passanger.setBalance(newBalance);
 			
 			map.put(cardId, passanger);
+			return passanger;
 		}
 		else {
 			Passanger passanger = new Passanger(cardId, balance);
 			map.put(cardId, passanger);
+			return passanger;
 		}
+		
+		
 	}
 
 	

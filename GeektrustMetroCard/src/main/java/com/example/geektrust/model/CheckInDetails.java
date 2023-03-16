@@ -17,19 +17,7 @@ public class CheckInDetails {
 		super();
 		this.metroCardId = metroCardId;
 		this.passangerType = passangerType;
-		this.fromStation = fromStation;
-		this.charge = setChargeBasedOnPassangerType(this.passangerType);
-	}
-
-	private int setChargeBasedOnPassangerType(String passangerType) {	
-		
-		switch(passangerType) {
-		
-			case "ADULT" : return 200;
-			case "SENIOR_CITIZEN" : return 100;
-			default : return 50;			
-				
-		}
+		this.fromStation = fromStation;		
 	}
 
 	public String getMetroCardId() {
@@ -68,8 +56,18 @@ public class CheckInDetails {
 		return charge;
 	}
 
-	public void setCharge(int charge) {
-		this.charge = charge;
+	public void setCharge(String passangerType) {
+		
+		switch(passangerType) {
+		
+		case "ADULT" : this.charge = 200;
+						break;
+		case "SENIOR_CITIZEN" : this.charge = 100;
+								break;
+		default : this.charge=50;	
+		
+		}
+			
 	}
 	
 }
